@@ -1,52 +1,75 @@
-import React, { useState } from "react";
+import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import * as courseActions from "../../redux/actions/courseActions";
+import * as authorActions from "../../redux/actions/authorsActions";
 import PropTypes from "prop-types";
+import { bindActionCreators } from "redux";
+import CourseList from "./CourseList";
 
 const CoursesPage = (props) => {
-  const [course, setCourse] = useState({ title: "" });
+  const { authors, courses, actions } = props;
 
-  const handleChange = (event) => {
-    const course = { ...course, title: event.target.value };
-    console.log(`Course: ${course}`);
-    setCourse(course);
-  };
+  useEffect(() => {
+    if (authors.length === 0) {
+      actions.loadAuthors.loadAuthors().catch((error) => {
+        alert(`Loading authors failed ${error}`);
+      });
+    }
 
-  const handleSubmit = (event) => {
-    event.preventDefault(); //this prevent to rerender page when we click submit
-    props.createCourse(course); //it saves thru reducer attribute to Redux
-    // alert(course.title);
-  };
+    if (courses.length === 0) {
+      actions.loadCourses.loadCourses().catch((error) => {
+        alert(`Loading courses failed ${error}`);
+      });
+    }
+
+    // OR
+    // props.loadCourses().catch((error) => {
+    //   alert(`Loading courses failed ${error}`);
+    // });
+
+    return () => {};
+  }, []);
 
   return (
-    //any time you click Enter or Save,  Form will submit. That is better than in /<input/>, because user can also hit Enter
-    <form onSubmit={handleSubmit}>
+    <div>
       <h2>Courses</h2>
-      <h3>Add Course</h3>
-      <input type="text" onChange={handleChange} value={course.title} />
-      <input type="submit" value="Save" />
-      {props.courses.map((course) => {
-        return <div key={course.title}>{course.title}</div>;
-      })}
-    </form>
+      <CourseList courses={courses} />
+    </div>
   );
 };
 
 function mapStateToProps(state) {
   return {
-    courses: state.courses,
+    courses:
+      state.authors.length === 0
+        ? []
+        : state.courses.map((course) => {
+            return {
+              ...course,
+              authorName: state.authors.find((a) => a.id === course.authorId)
+                .name,
+            };
+          }),
+    authors: state.authors,
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    createCourse: (course) => dispatch(courseActions.createCourse(course)),
+    actions: {
+      loadCourses: bindActionCreators(courseActions, dispatch),
+      loadAuthors: bindActionCreators(authorActions, dispatch),
+    },
+    // createCourse: (course) => dispatch(courseActions.createCourse(course)),
+    // loadCourses: () => dispatch(courseActions.loadCourses()),
   };
 }
 
 CoursesPage.propTypes = {
-  createCourse: PropTypes.func.isRequired,
+  // createCourse: PropTypes.func.isRequired,
+  actions: PropTypes.object.isRequired,
   courses: PropTypes.array.isRequired,
+  authors: PropTypes.array.isRequired,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(CoursesPage);
