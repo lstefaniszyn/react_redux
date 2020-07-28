@@ -1,10 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
 const { Link } = require("react-router-dom");
-// import { connect } from "react-redux";
-// import { bindActionCreators } from "redux";
-
-// import * as authorActions from "../../redux/actions/authorsActions";
 
 const CourseList = (props) => {
   return (

@@ -13,6 +13,7 @@ const ManageCoursePage = ({
   loadAuthors,
   loadCourses,
   saveCourse,
+  history,
   ...props
 }) => {
   const [course, setCourse] = useState({ ...props.course });
@@ -29,8 +30,10 @@ const ManageCoursePage = ({
       loadCourses().catch((error) => {
         alert(`Loading courses failed ${error}`);
       });
+    } else {
+      setCourse({...props.course});
     }
-  }, []);
+  }, [props.course]);
 
   function handleChange(event) {
     const { name, value } = event.target;
@@ -40,11 +43,10 @@ const ManageCoursePage = ({
     }));
   }
 
-  function handleSave(event){
-      event.preventDefault();
-      saveCourse(course);
+  function handleSave(event) {
+    event.preventDefault();
+    saveCourse(course).then(() => history.push("/courses")); //history is props  from React Router
   }
-
 
   return (
     <CourseForm
@@ -57,9 +59,19 @@ const ManageCoursePage = ({
   );
 };
 
-function mapStateToProps(state) {
+export function getCourseBySlug(courses, slug) {
+  return courses.find((course) => course.slug === slug) || null;
+}
+
+function mapStateToProps(state, ownProps) {
+  //ownProps is props from React component
+  const slug = ownProps.match.params.slug; // this 'slug' is taken from url from App.js  /course/:slug
+  const course =
+    slug && state.courses.length > 0
+      ? getCourseBySlug(state.courses, slug)
+      : newCourse;
   return {
-    course: newCourse,
+    course: course,
     courses: state.courses,
     authors: state.authors,
   };
@@ -78,6 +90,7 @@ ManageCoursePage.propTypes = {
   loadAuthors: PropTypes.func.isRequired,
   courses: PropTypes.array.isRequired,
   authors: PropTypes.array.isRequired,
+  history: PropTypes.object.isRequired,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ManageCoursePage);
