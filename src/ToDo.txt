@@ -1,0 +1,21 @@
+ Looking for some ideas to try on your own, here are some suggestions. 
+ 
+ 1. Add support for administering authors as well. And here's a hint. Be sure to add some logic that makes sure you can't delete an author who has a course. 
+ 
+ 2. Add filters for the course list at the top of the course list table. 
+ 
+ 3. Hide the course list table when there are no courses. 
+ 
+ 4. Message to the user if they try to leave the Manage Course form when they have unsaved changes. 
+ 
+ 5. Enhance the client and server‑side validation on the Manage Course form to be more strict about the data that you can enter. 
+ 
+ 6. This is a surprisingly fun one, the challenge is showing a 404 on the Manage Course page when an invalid course slug is provided in the URL. Here's a hint. Add some logic to mapStateToProps. 
+ 
+ 7. Show the number of courses in the header. This is a great example of how Redux's single store model pays off. You'll see that adding this is really trivial, and there's no worry of it getting out of sync.
+ 
+ 8. Add pagination to the course table in order to support large datasets. 
+ 
+ 9. Sort the course table alphabetically by title by default so that the last record updated or created isn't always placed at the bottom, or to go a step beyond, add drop‑downs above the table that allow you to sort by different columns. As a hint, mapStateToProps is a good way to get this done. 
+ 
+ 10. And the final challenge is try to keep the old course data so that users can view history and click Undo to revert their changes even after hitting Save. This should help you put your newfound skills to use
