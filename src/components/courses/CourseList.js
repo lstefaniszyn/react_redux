@@ -1,21 +1,57 @@
 import React from "react";
 import PropTypes from "prop-types";
+import TextInput from "../common/TextInput";
+import SelectInput from "../common/SelectInput";
 const { Link } = require("react-router-dom");
 
-const CourseList = (props) => {
+const CourseList = ({ authors, courses, onDeleteClick }) => {
   return (
     <table className="table">
       <thead>
         <tr>
           <th />
-          <th>Title</th>
-          <th>Author</th>
-          <th>Category</th>
+          <th>
+            <>
+              <p>Title</p>
+              <div>
+                <TextInput
+                  name="title"
+                  onChange={(event) => {
+                    console.log(`Title updated to: ${event.target.value}`);
+                  }}
+                />
+              </div>
+            </>
+          </th>
+          <th>
+            <>
+              <p>Author</p>
+              <div>
+                <SelectInput
+                  name="authorId"
+                  defaultOption="Select Author"
+                  options={authors.map((author) => ({
+                    value: author.id,
+                    text: author.name,
+                  }))}
+                  onChange={() => {}}
+                />
+              </div>
+            </>
+          </th>
+          <th>
+            <>
+              <p>Category</p>
+              <div>
+                <TextInput name="category" onChange={() => {}} />
+              </div>
+            </>
+          </th>
           <th />
         </tr>
       </thead>
       <tbody>
-        {props.courses.map((course) => {
+        {courses.map((course) => {
           return (
             <tr key={course.id}>
               <td>
@@ -34,7 +70,7 @@ const CourseList = (props) => {
               <td>
                 <button
                   className="btn btn-outline-danger"
-                  onClick={() => props.onDeleteClick(course)}
+                  onClick={() => onDeleteClick(course)}
                 >
                   Delete
                 </button>
@@ -48,6 +84,7 @@ const CourseList = (props) => {
 };
 
 CourseList.propTypes = {
+  authors: PropTypes.array.isRequired,
   courses: PropTypes.array.isRequired,
   onDeleteClick: PropTypes.func.isRequired,
 };

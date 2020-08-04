@@ -3,25 +3,30 @@ import { connect } from "react-redux";
 import * as courseActions from "../../redux/actions/courseActions";
 import * as authorActions from "../../redux/actions/authorsActions";
 import PropTypes from "prop-types";
-import { bindActionCreators } from "redux";
 import CourseList from "./CourseList";
 import { Redirect } from "react-router-dom";
 import Spinner from "../common/Spinner";
 import { toast } from "react-toastify";
 
-const CoursesPage = (props) => {
-  const { authors, courses, actions } = props;
+export const CoursesPage = ({
+  authors,
+  courses,
+  loading = true,
+  actionLoadCourses,
+  actionDeleteCourse,
+  actionLoadAuthors,
+}) => {
   const [redirectToAddCoursePage, setRedirectToAddCoursePage] = useState(false);
 
   useEffect(() => {
     if (authors.length === 0) {
-      actions.loadAuthors().catch((error) => {
+      actionLoadAuthors().catch((error) => {
         alert(`Loading authors failed ${error}`);
       });
     }
 
     if (courses.length === 0) {
-      actions.loadCourses().catch((error) => {
+      actionLoadCourses().catch((error) => {
         alert(`Loading courses failed ${error}`);
       });
     }
@@ -37,7 +42,7 @@ const CoursesPage = (props) => {
   const handleDeleteCourse = async (course) => {
     toast.success("Course deleted."); //we will optimistic by inform use that "Course" has been already deleted
     try {
-      await actions.deleteCourse(course);
+      await actionDeleteCourse(course);
     } catch (error) {
       toast.error(`Delete failed. ${error.message}`, { autoClose: false });
     }
@@ -45,11 +50,10 @@ const CoursesPage = (props) => {
 
   return (
     <div>
+      <h2>Courses</h2>
       {redirectToAddCoursePage && <Redirect to="/course" />}
 
-      <h2>Courses</h2>
-
-      {props.loading ? (
+      {loading ? (
         <Spinner />
       ) : (
         <>
@@ -61,7 +65,11 @@ const CoursesPage = (props) => {
             Add Course
           </button>
 
-          <CourseList courses={courses} onDeleteClick={handleDeleteCourse} />
+          {courses.length === 0 ? (
+            <h3 style={{ fontFamily: "cursive" }}>No courses available</h3>
+          ) : (
+            <CourseList authors={authors} courses={courses} onDeleteClick={handleDeleteCourse} />
+          )}
         </>
       )}
     </div>
@@ -85,24 +93,22 @@ function mapStateToProps(state) {
   };
 }
 
-function mapDispatchToProps(dispatch) {
-  return {
-    actions: {
-      loadCourses: bindActionCreators(courseActions.loadCourses, dispatch),
-      loadAuthors: bindActionCreators(authorActions.loadAuthors, dispatch),
-      deleteCourse: bindActionCreators(courseActions.deleteCourse, dispatch),
-    },
-    // createCourse: (course) => dispatch(courseActions.createCourse(course)),
-    // loadCourses: () => dispatch(courseActions.loadCourses()),
-  };
-}
+const mapDispatchToProps = {
+  actionLoadCourses: courseActions.loadCourses,
+  actionLoadAuthors: authorActions.loadAuthors,
+  actionDeleteCourse: courseActions.deleteCourse,
+  // createCourse: (course) => dispatch(courseActions.createCourse(course)),
+  // loadCourses: () => dispatch(courseActions.loadCourses()),
+};
 
 CoursesPage.propTypes = {
   // createCourse: PropTypes.func.isRequired,
-  actions: PropTypes.object.isRequired,
   courses: PropTypes.array.isRequired,
   authors: PropTypes.array.isRequired,
   loading: PropTypes.bool.isRequired,
+  actionLoadCourses: PropTypes.func.isRequired,
+  actionLoadAuthors: PropTypes.func.isRequired,
+  actionDeleteCourse: PropTypes.func.isRequired,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(CoursesPage);

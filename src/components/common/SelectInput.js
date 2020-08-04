@@ -8,11 +8,11 @@ const SelectInput = ({
   defaultOption,
   value,
   error,
-  options
+  options,
 }) => {
   return (
     <div className="form-group">
-      <label htmlFor={name}>{label}</label>
+      {label !== undefined && <label htmlFor={name}>{label}</label>}
       <div className="field">
         {/* Note, value is set here rather than on the option - docs: https://facebook.github.io/react/docs/forms.html */}
         <select
@@ -22,7 +22,7 @@ const SelectInput = ({
           className="form-control"
         >
           <option value="">{defaultOption}</option>
-          {options.map(option => {
+          {options.map((option) => {
             return (
               <option key={option.value} value={option.value}>
                 {option.text}
@@ -38,12 +38,12 @@ const SelectInput = ({
 
 SelectInput.propTypes = {
   name: PropTypes.string.isRequired,
-  label: PropTypes.string.isRequired,
+  label: PropTypes.string,
   onChange: PropTypes.func.isRequired,
   defaultOption: PropTypes.string,
   value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   error: PropTypes.string,
-  options: PropTypes.arrayOf(PropTypes.object)
+  options: PropTypes.arrayOf(PropTypes.object),
 };
 
 export default SelectInput;
