@@ -1,6 +1,6 @@
 import React from "react";
 import { CoursesPage } from "./CoursesPage";
-import { cleanup, render } from "react-testing-library";
+import { cleanup, render } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 
 afterEach(cleanup);

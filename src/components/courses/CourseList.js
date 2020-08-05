@@ -34,7 +34,9 @@ const CourseList = ({ authors, courses, onDeleteClick }) => {
                     value: author.id,
                     text: author.name,
                   }))}
-                  onChange={() => {}}
+                  onChange={(event) => {
+                    console.log(`Author updated to: ${event.target.value}`);
+                  }}
                 />
               </div>
             </>
@@ -43,7 +45,12 @@ const CourseList = ({ authors, courses, onDeleteClick }) => {
             <>
               <p>Category</p>
               <div>
-                <TextInput name="category" onChange={() => {}} />
+                <TextInput
+                  name="category"
+                  onChange={(event) => {
+                    console.log(`Category updated to: ${event.target.value}`);
+                  }}
+                />
               </div>
             </>
           </th>

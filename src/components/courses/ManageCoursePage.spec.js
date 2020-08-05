@@ -11,7 +11,7 @@ function render(args) {
     loadAuthors: jest.fn(),
     loadCourses: jest.fn(),
     saveCourse: jest.fn(),
-    // history: {},
+    history: {},
     course: newCourse,
     match: {},
   };

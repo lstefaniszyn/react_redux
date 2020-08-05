@@ -1,5 +1,5 @@
 import React from "react";
-import { cleanup, render } from "react-testing-library";
+import { cleanup, render } from "@testing-library/react";
 import CourseForm from "./CourseForm";
 
 afterEach(cleanup);
@@ -18,8 +18,8 @@ function renderCourseForm(args) {
 }
 
 it("should render Add Course header", () => {
- //getByText  and many more API calls can be found    https://testing-library.com/docs/dom-testing-library/api-queries
-    const { getByText } = renderCourseForm();
+  //getByText  and many more API calls can be found    https://testing-library.com/docs/dom-testing-library/api-queries
+  const { getByText, debug } = renderCourseForm();
   getByText("Add Course");
 });
 
