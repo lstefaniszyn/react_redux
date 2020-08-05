@@ -23,18 +23,42 @@ function renderElement(args) {
   );
 }
 
-it('Given non empty CourseList when I start filter by "Title" that does not exists then number of visible courses will reduce to this one', () => {
+test('Given non empty CourseList when I start filter by "Title" that does not exists then number of visible courses will reduce to only table headers', () => {
+  // Given
   renderElement();
-  var element = document.getElementsByName("title")[0];
+  var tableRows = document.getElementsByTagName("table")[0].tBodies[0].rows;
+  expect(tableRows.length).toBeGreaterThan(0);
 
-  fireEvent.change(element, { target: { value: "TestMe" } });
-  var tableRows = document.getElementsByTagName("tr");
+  // When
+  var elementInputTitle = document.getElementsByName("title")[0];
+  fireEvent.change(elementInputTitle, {
+    target: { value: "Course does not exist" },
+  }); //  https://testing-library.com/docs/dom-testing-library/api-events
+  expect(elementInputTitle.value).toBe("Course does not exist");
+
+  // Then
+  //document.getElementsByTagName("table")[0].tBodies[0].rows[0].textContent
   console.log(`Title is: ${tableRows[1].cells[1].textContent}`); // prints Securing React Apps with Auth0
-  console.log(tableRows.length > 0);
-  expect(element.value).toBe("TestMe");
-  //   screen.debug();
+  expect(tableRows.length, "Number of visible rows should be 0").toBe(0);
+  screen.debug();
 });
 
-it('Given non empty CourseList when I start filter by "Title" that partially exists then number of visible courses will reduce', () => {});
+test('Given non empty CourseList when I start filter by "Title" that partially exists then number of visible courses will reduce', () => {
+  // Given
+  renderElement();
+  var tableRows = document.getElementsByTagName("table")[0].tBodies[0].rows;
+  expect(tableRows.length).toBeGreaterThan(0);
 
-it('Given non empty CourseList when I start filter by "Title" that does not exists then number of visible courses will be null', () => {});
+  // When
+  var elementInputTitle = document.getElementsByName("title")[0];
+  fireEvent.change(elementInputTitle, {
+    target: { value: "Building" },
+  }); //  https://testing-library.com/docs/dom-testing-library/api-events
+  expect(elementInputTitle.value).toBe("Building");
+
+  // Then
+  //document.getElementsByTagName("table")[0].tBodies[0].rows[0].textContent
+  console.log(`Title is: ${tableRows[1].cells[1].textContent}`); // prints Securing React Apps with Auth0
+  expect(tableRows.length, "Number of visible rows should be 3").toBe(3);
+  screen.debug();
+});
