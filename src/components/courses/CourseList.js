@@ -21,8 +21,7 @@ const CourseList = ({ authors, courses, onDeleteClick }) => {
                   onChange={(event) => {
                     setCoursesList(
                       courses.filter((course) => {
-                        var courseTitle = course.title.toLowerCase();
-                        return courseTitle.includes(
+                        return `${course.title.toLowerCase()}`.includes(
                           event.target.value.toLowerCase()
                         );
                       })
@@ -44,7 +43,16 @@ const CourseList = ({ authors, courses, onDeleteClick }) => {
                     text: author.name,
                   }))}
                   onChange={(event) => {
-                    console.log(`Author updated to: ${event.target.value}`);
+                    setCoursesList(
+                      event.target.value === "" //when user did not select Author
+                        ? courses
+                        : courses.filter((course) => {
+                            return (
+                              course.authorId ===
+                              parseInt(event.target.value, 10)
+                            );
+                          })
+                    );
                   }}
                 />
               </div>
@@ -57,7 +65,13 @@ const CourseList = ({ authors, courses, onDeleteClick }) => {
                 <TextInput
                   name="category"
                   onChange={(event) => {
-                    console.log(`Category updated to: ${event.target.value}`);
+                    setCoursesList(
+                      courses.filter((course) => {
+                        return `${course.category.toLowerCase()}`.includes(
+                          event.target.value.toLowerCase()
+                        );
+                      })
+                    );
                   }}
                 />
               </div>
