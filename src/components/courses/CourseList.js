@@ -1,11 +1,37 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import TextInput from "../common/TextInput";
 import SelectInput from "../common/SelectInput";
 const { Link } = require("react-router-dom");
 
+function dynamicObjectComparator(property, sortType = sortByTypes.ASC) {
+  return function (a, b) {
+    if (a[property] > b[property]) {
+      return -1 * sortType.sortOrder;
+    } else if (a[property] < b[property]) {
+      return 1 * sortType.sortOrder;
+    } else {
+      return 0;
+    }
+  };
+}
+
+const sortByTypes = {
+  DESC: { text: "descending", sortOrder: 1 },
+  ASC: { text: "ascending", sortOrder: -1 },
+};
+
 const CourseList = ({ authors, courses, onDeleteClick }) => {
   const [coursesList, setCoursesList] = useState(courses);
+
+  useEffect(() => {
+    setCoursesList([
+      ...courses.sort(dynamicObjectComparator("title", sortByTypes.ASC)),
+    ]);
+    return () => {
+      //cleanup;
+    };
+  }, []);
 
   return (
     <table className="table">

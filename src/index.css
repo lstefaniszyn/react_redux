@@ -6,3 +6,7 @@
 nav {
   padding: 20px 0 20px 0;
 }
+
+table th {
+  min-width: 83px;
+}
