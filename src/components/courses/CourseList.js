@@ -1,10 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import TextInput from "../common/TextInput";
 import SelectInput from "../common/SelectInput";
 const { Link } = require("react-router-dom");
 
 const CourseList = ({ authors, courses, onDeleteClick }) => {
+  const [coursesList, setCoursesList] = useState(courses);
+
   return (
     <table className="table">
       <thead>
@@ -17,7 +19,14 @@ const CourseList = ({ authors, courses, onDeleteClick }) => {
                 <TextInput
                   name="title"
                   onChange={(event) => {
-                    console.log(`Title updated to: ${event.target.value}`);
+                    setCoursesList(
+                      courses.filter((course) => {
+                        var courseTitle = course.title.toLowerCase();
+                        return courseTitle.includes(
+                          event.target.value.toLowerCase()
+                        );
+                      })
+                    );
                   }}
                 />
               </div>
@@ -58,7 +67,7 @@ const CourseList = ({ authors, courses, onDeleteClick }) => {
         </tr>
       </thead>
       <tbody>
-        {courses.map((course) => {
+        {coursesList.map((course) => {
           return (
             <tr key={course.id}>
               <td>
@@ -96,19 +105,4 @@ CourseList.propTypes = {
   onDeleteClick: PropTypes.func.isRequired,
 };
 
-// function mapStateToProps(state) {
-//   return {
-//     authors: state.authors,
-//   };
-// }
-
-// function mapDispatchToProps(dispatch) {
-//   return {
-//     actions: {
-//       loadAuthors: bindActionCreators(authorActions, dispatch),
-//     },
-//   };
-// }
-
 export default CourseList;
-// export default connect(mapStateToProps, mapDispatchToProps)(CourseList);
