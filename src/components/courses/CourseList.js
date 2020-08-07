@@ -40,7 +40,7 @@ const CourseList = ({ authors, courses, onDeleteClick }) => {
           <th />
           <th>
             <>
-              <p>Title</p>
+              <p className="sort-header" onClick={ ()=> {console.log("sortME")}  }>Title</p>
               <div>
                 <TextInput
                   name="title"
@@ -59,7 +59,7 @@ const CourseList = ({ authors, courses, onDeleteClick }) => {
           </th>
           <th>
             <>
-              <p>Author</p>
+              <p className="sort-header">Author</p>
               <div>
                 <SelectInput
                   name="authorId"
@@ -86,7 +86,7 @@ const CourseList = ({ authors, courses, onDeleteClick }) => {
           </th>
           <th>
             <>
-              <p>Category</p>
+              <p className="sort-header">Category</p>
               <div>
                 <TextInput
                   name="category"

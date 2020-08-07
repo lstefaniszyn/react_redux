@@ -10,3 +10,13 @@ nav {
 table th {
   min-width: 83px;
 }
+
+.sort-header {
+  background-image: url(./image/bg.gif);
+  background-repeat: no-repeat;
+  background-position: center right;
+}
+
+.form-group {
+  margin-right: 1rem;
+}

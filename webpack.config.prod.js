@@ -14,20 +14,20 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, "build"),
     publicPath: "/",
-    filename: "bundle.js"
+    filename: "bundle.js",
   },
   plugins: [
     // Display bundle stats
     new webpackBundleAnalyzer.BundleAnalyzerPlugin({ analyzerMode: "static" }),
 
     new MiniCssExtractPlugin({
-      filename: "[name].[contenthash].css"
+      filename: "[name].[contenthash].css",
     }),
 
     new webpack.DefinePlugin({
       // This global makes sure React is built in prod mode.
       "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV),
-      "process.env.API_URL": JSON.stringify("http://localhost:3001")
+      "process.env.API_URL": JSON.stringify("http://localhost:3001"),
     }),
     new HtmlWebpackPlugin({
       template: "src/index.html",
@@ -43,16 +43,30 @@ module.exports = {
         keepClosingSlash: true,
         minifyJS: true,
         minifyCSS: true,
-        minifyURLs: true
-      }
-    })
+        minifyURLs: true,
+      },
+    }),
   ],
   module: {
     rules: [
       {
         test: /\.(js|jsx)$/,
         exclude: /node_modules/,
-        use: ["babel-loader", "eslint-loader"]
+        use: ["babel-loader", "eslint-loader"],
+      },
+      {
+        // files configuration
+        test: /\.(jpg|jpeg|gif|png|woff|woff2)$/,
+        use: [
+          {
+            loader: "file-loader",
+            options: {
+              name: "[name].[ext]",
+              outputPath: "img",
+              esModule: false,
+            },
+          },
+        ],
       },
       {
         test: /(\.css)$/,
@@ -61,18 +75,18 @@ module.exports = {
           {
             loader: "css-loader",
             options: {
-              sourceMap: true
-            }
+              sourceMap: true,
+            },
           },
           {
             loader: "postcss-loader",
             options: {
               plugins: () => [require("cssnano")],
-              sourceMap: true
-            }
-          }
-        ]
-      }
-    ]
-  }
+              sourceMap: true,
+            },
+          },
+        ],
+      },
+    ],
+  },
 };

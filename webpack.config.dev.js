@@ -43,6 +43,20 @@ module.exports = {
         test: /(\.css)$/,
         use: ["style-loader", "css-loader"],
       },
+      {
+        // files configuration
+        test: /\.(jpg|jpeg|gif|png|woff|woff2)$/,
+        use: [
+          {
+            loader: "file-loader",
+            options: {
+              name: "[name].[ext]",
+              outputPath: "img",
+              esModule: false,
+            },
+          },
+        ],
+      },
     ],
   },
 };

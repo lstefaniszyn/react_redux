@@ -14,6 +14,7 @@ const App = () => {
   return (
     <div className="container-fluid">
       <Header />
+
       <Switch>
         <Route exact path="/" component={HomePage} />
         <Route path="/courses" component={CoursesPage} />
