@@ -17,21 +17,57 @@ function dynamicObjectComparator(property, sortType = sortByTypes.ASC) {
 }
 
 const sortByTypes = {
-  DESC: { text: "descending", sortOrder: 1 },
-  ASC: { text: "ascending", sortOrder: -1 },
+  DESC: { text: "descending", sortOrder: 1, class: "sort-header-desc" },
+  ASC: { text: "ascending", sortOrder: -1, class: "sort-header-asc" },
+  NONE: { text: "none", sortOrder: 0, class: "sort-header-none" },
 };
 
 const CourseList = ({ authors, courses, onDeleteClick }) => {
   const [coursesList, setCoursesList] = useState(courses);
+  const [sorterStatus, setSorterStatus] = useState({
+    title: { sortType: sortByTypes.NONE, name: "title" },
+    authorId: { sortType: sortByTypes.NONE, name: "authorId" },
+    category: { sortType: sortByTypes.NONE, name: "category" },
+  });
 
   useEffect(() => {
     setCoursesList([
-      ...courses.sort(dynamicObjectComparator("title", sortByTypes.ASC)),
+      ...coursesList.sort(dynamicObjectComparator("title", sortByTypes.ASC)),
     ]);
+
+    setSorterStatus({
+      ...sorterStatus,
+      ["title"]: { sortType: sortByTypes.ASC, name: "title" },
+    });
+
     return () => {
       //cleanup;
     };
   }, []);
+
+  function onClickSort(event) {
+    console.log(`Clicked "${event.target.attributes.name.value}"`);
+    var elementName = event.target.attributes.name.value;
+    if (!sorterStatus.hasOwnProperty(elementName)) {
+      throw new Error("Unable to find Element name to sort");
+    }
+
+    if (sorterStatus[elementName].sortType === sortByTypes.NONE) {
+      sorterStatus[elementName].sortType = sortByTypes.ASC;
+    } else if (sorterStatus[elementName].sortType === sortByTypes.ASC) {
+      sorterStatus[elementName].sortType = sortByTypes.DESC;
+    } else {
+      sorterStatus[elementName].sortType = sortByTypes.ASC;
+    }
+    setCoursesList([
+      ...coursesList.sort(
+        dynamicObjectComparator(
+          elementName,
+          sorterStatus[elementName].sortType
+        )
+      ),
+    ]);
+  }
 
   return (
     <table className="table">
@@ -40,7 +76,15 @@ const CourseList = ({ authors, courses, onDeleteClick }) => {
           <th />
           <th>
             <>
-              <p className="sort-header" onClick={ ()=> {console.log("sortME")}  }>Title</p>
+              <p
+                name="title"
+                className={sorterStatus.title.sortType.class} //"sort-header-none"
+                onClick={(event) => {
+                  onClickSort(event);
+                }}
+              >
+                Title
+              </p>
               <div>
                 <TextInput
                   name="title"
@@ -59,7 +103,9 @@ const CourseList = ({ authors, courses, onDeleteClick }) => {
           </th>
           <th>
             <>
-              <p className="sort-header">Author</p>
+              <p name="authorId" className="sort-header-none">
+                Author
+              </p>
               <div>
                 <SelectInput
                   name="authorId"
@@ -86,7 +132,9 @@ const CourseList = ({ authors, courses, onDeleteClick }) => {
           </th>
           <th>
             <>
-              <p className="sort-header">Category</p>
+              <p name="category" className="sort-header-none">
+                Category
+              </p>
               <div>
                 <TextInput
                   name="category"
