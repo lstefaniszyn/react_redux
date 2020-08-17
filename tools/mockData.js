@@ -66,7 +66,7 @@ const courses = [
     id: 10,
     title: "Web Component Fundamentals",
     slug: "web-components-shadow-dom",
-    authorId: 2,
+    authorId: 3,
     category: "HTML5",
   },
 ];

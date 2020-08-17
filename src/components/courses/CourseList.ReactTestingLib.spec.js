@@ -8,8 +8,13 @@ afterEach(cleanup);
 
 function renderElement(args) {
   const defaultProps = {
-    authors,
-    courses,
+    authors: authors,
+    courses: courses.map((course) => {
+      return {
+        ...course,
+        authorName: authors.find((a) => a.id === course.authorId).name,
+      };
+    }),
     onDeleteClick: () => {},
   };
 
@@ -30,7 +35,7 @@ describe("Course List, filter by Title", () => {
     expect(tableRows.length).toBeGreaterThan(0);
 
     // When
-    var elementInputTitle = document.getElementsByName("title")[0];
+    var elementInputTitle = document.getElementsByName("title")[1];
     fireEvent.change(elementInputTitle, {
       target: { value: "Course does not exist" },
     }); //  https://testing-library.com/docs/dom-testing-library/api-events
@@ -51,7 +56,7 @@ describe("Course List, filter by Title", () => {
     expect(tableRows.length).toBeGreaterThan(0);
 
     // When
-    var elementInputTitle = document.getElementsByName("title")[0];
+    var elementInputTitle = document.getElementsByName("title")[1];
     fireEvent.change(elementInputTitle, {
       target: { value: "Building" },
     }); //  https://testing-library.com/docs/dom-testing-library/api-events
@@ -70,7 +75,7 @@ describe("Course List, filter by Title", () => {
     renderElement();
     var tableRows = document.getElementsByTagName("table")[0].tBodies[0].rows;
     expect(tableRows.length).toBeGreaterThan(0);
-    var elementInputTitle = document.getElementsByName("title")[0];
+    var elementInputTitle = document.getElementsByName("title")[1];
     fireEvent.change(elementInputTitle, {
       target: { value: "React" },
     }); //  https://testing-library.com/docs/dom-testing-library/api-events
@@ -103,7 +108,7 @@ describe("Course List, filter by Category", () => {
     expect(tableRows.length).toBeGreaterThan(0);
 
     // When
-    var elementInputTitle = document.getElementsByName("category")[0];
+    var elementInputTitle = document.getElementsByName("category")[1];
     fireEvent.change(elementInputTitle, {
       target: { value: "Category does not exist" },
     }); //  https://testing-library.com/docs/dom-testing-library/api-events
@@ -124,7 +129,7 @@ describe("Course List, filter by Category", () => {
     expect(tableRows.length).toBeGreaterThan(0);
 
     // When
-    var elementInputTitle = document.getElementsByName("category")[0];
+    var elementInputTitle = document.getElementsByName("category")[1];
     fireEvent.change(elementInputTitle, {
       target: { value: "JavaScript" },
     }); //  https://testing-library.com/docs/dom-testing-library/api-events
@@ -143,7 +148,7 @@ describe("Course List, filter by Category", () => {
     renderElement();
     var tableRows = document.getElementsByTagName("table")[0].tBodies[0].rows;
     expect(tableRows.length).toBeGreaterThan(0);
-    var elementInputTitle = document.getElementsByName("category")[0];
+    var elementInputTitle = document.getElementsByName("category")[1];
     fireEvent.change(elementInputTitle, {
       target: { value: "Career" },
     }); //  https://testing-library.com/docs/dom-testing-library/api-events
@@ -176,7 +181,7 @@ describe("Course List, filter by Author", () => {
     expect(tableRows.length).toBeGreaterThan(0);
 
     // When
-    var elementInputTitle = document.getElementsByName("authorId")[0];
+    var elementInputTitle = document.getElementsByName("authorId")[1];
     fireEvent.change(elementInputTitle, {
       target: { value: `${getAuthorId("Scott Allen")}` },
     }); //  https://testing-library.com/docs/dom-testing-library/api-events
@@ -185,8 +190,8 @@ describe("Course List, filter by Author", () => {
     // Then
     expect(
       tableRows.length,
-      "Number of visible rows with 'Scott Allen' should be 2"
-    ).toBe(2);
+      "Number of visible rows with 'Scott Allen' should be 1"
+    ).toBe(1);
     // screen.debug();
   });
 
@@ -195,7 +200,7 @@ describe("Course List, filter by Author", () => {
     renderElement();
     var tableRows = document.getElementsByTagName("table")[0].tBodies[0].rows;
     expect(tableRows.length).toBeGreaterThan(0);
-    var elementInputTitle = document.getElementsByName("authorId")[0];
+    var elementInputTitle = document.getElementsByName("authorId")[1];
 
     fireEvent.change(elementInputTitle, {
       target: { value: `${getAuthorId("Scott Allen")}` },
@@ -203,8 +208,8 @@ describe("Course List, filter by Author", () => {
     expect(elementInputTitle.value).toBe(`${getAuthorId("Scott Allen")}`);
     expect(
       tableRows.length,
-      "Number of visible rows with 'Scott Allen' should be 2"
-    ).toBe(2);
+      "Number of visible rows with 'Scott Allen' should be 1"
+    ).toBe(1);
 
     // When
     fireEvent.change(elementInputTitle, {
@@ -225,7 +230,7 @@ describe("Course List, filter by Author", () => {
     renderElement();
     var tableRows = document.getElementsByTagName("table")[0].tBodies[0].rows;
     expect(tableRows.length).toBeGreaterThan(0);
-    var elementInputTitle = document.getElementsByName("authorId")[0];
+    var elementInputTitle = document.getElementsByName("authorId")[1];
 
     fireEvent.change(elementInputTitle, {
       target: { value: `${getAuthorId("Scott Allen")}` },
@@ -233,8 +238,8 @@ describe("Course List, filter by Author", () => {
     expect(elementInputTitle.value).toBe(`${getAuthorId("Scott Allen")}`);
     expect(
       tableRows.length,
-      "Number of visible rows with 'Scott Allen' should be 2"
-    ).toBe(2);
+      "Number of visible rows with 'Scott Allen' should be 1"
+    ).toBe(1);
 
     // When
     fireEvent.change(elementInputTitle, {
@@ -248,6 +253,144 @@ describe("Course List, filter by Author", () => {
       "Number of visible rows with 'Select Author' should be 10"
     ).toBe(10);
     // screen.debug();
+  });
+});
+
+describe("Course List, Sort by Title", () => {
+  it('GIVEN non empty CourseList with default sorting by title A-Z  WHEN I click sort DESC by "Title" THEN courses list will be sorted by Title alphabetical Z-A', () => {
+    // Given
+    const { debug } = renderElement();
+    var tableRows = document.getElementsByTagName("table")[0].tBodies[0].rows;
+    expect(tableRows.length).toBeGreaterThan(0);
+    expect(tableRows[0].cells[1].textContent).toBe(
+      "Architecting Applications for the Real World"
+    );
+    var elementInputTitle = document.getElementsByTagName("p").title;
+
+    // When
+    fireEvent.click(elementInputTitle); //sort Z-A
+
+    // Then
+    expect(tableRows[tableRows.length - 1].cells[1].textContent).toBe(
+      "Architecting Applications for the Real World"
+    );
+    expect(elementInputTitle.className).toBe("sort-header-desc");
+  });
+  it('GIVEN non empty CourseList WHEN I click sort DESC by "Title" THEN courses list will be sorted by Title alphabetical Z-A', () => {});
+  it('GIVEN non empty CourseList WHEN I click sort ASC by "Author" THEN courses list will be sorted by Author alphabetical A-Z', () => {
+    // Given
+    const { debug } = renderElement();
+    var tableRows = document.getElementsByTagName("table")[0].tBodies[0].rows;
+    expect(tableRows.length).toBeGreaterThan(0);
+
+    expect(tableRows[1].getElementsByTagName("td")[2].textContent).toBe(
+      "Scott Allen"
+    );
+    var element = document.getElementsByTagName("p").authorId;
+    expect(element.className).toBe("sort-header-none");
+
+    // When
+    fireEvent.click(element); //sort A-Z
+
+    // Then
+    expect(tableRows[1].getElementsByTagName("td")[2].textContent).toBe(
+      "Cory House"
+    );
+    expect(element.className).toBe("sort-header-asc");
+  });
+  it('GIVEN non empty CourseList WHEN I click sort ASC by "Author" THEN courses list will be sorted by Author alphabetical Z-A', () => {
+    // Given
+    const { debug } = renderElement();
+    var tableRows = document.getElementsByTagName("table")[0].tBodies[0].rows;
+    expect(tableRows.length).toBeGreaterThan(0);
+    var element = document.getElementsByTagName("p").authorId;
+    fireEvent.click(element); //sort A-Z
+    expect(tableRows[0].getElementsByTagName("td")[2].textContent).toBe(
+      "Cory House"
+    );
+    expect(element.className).toBe("sort-header-asc");
+
+    // When
+    fireEvent.click(element); //sort Z-A
+
+    // Then
+    expect(tableRows[0].getElementsByTagName("td")[2].textContent).toBe(
+      "Dan Wahlin"
+    );
+    expect(element.className).toBe("sort-header-desc");
+  });
+  it('GIVEN non empty CourseList WHEN I click sort ASC by "Category" THEN courses list will be sorted by Category alphabetical A-Z', () => {
+    // Given
+    const { debug } = renderElement();
+    var tableRows = document.getElementsByTagName("table")[0].tBodies[0].rows;
+    expect(tableRows.length).toBeGreaterThan(0);
+
+    expect(tableRows[0].getElementsByTagName("td")[3].textContent).toBe(
+      "Software Architecture"
+    );
+    var element = document.getElementsByTagName("p").category;
+    expect(element.className).toBe("sort-header-none");
+
+    // When
+    fireEvent.click(element); //sort A-Z
+
+    // Then
+    expect(tableRows[0].getElementsByTagName("td")[3].textContent).toBe(
+      "Career"
+    );
+    expect(element.className).toBe("sort-header-asc");
+  });
+  it('GIVEN non empty CourseList WHEN I click sort ASC by "Category" THEN courses list will be sorted by Category alphabetical Z-A', () => {
+    // Given
+    const { debug } = renderElement();
+    var tableRows = document.getElementsByTagName("table")[0].tBodies[0].rows;
+    expect(tableRows.length).toBeGreaterThan(0);
+    var element = document.getElementsByTagName("p").category;
+    fireEvent.click(element); //sort A-Z
+    expect(tableRows[0].getElementsByTagName("td")[3].textContent).toBe(
+      "Career"
+    );
+    expect(element.className).toBe("sort-header-asc");
+
+    // When
+    fireEvent.click(element); //sort A-Z
+
+    // Then
+    expect(tableRows[0].getElementsByTagName("td")[3].textContent).toBe(
+      "Software Practices"
+    );
+    expect(element.className).toBe("sort-header-desc");
+  });
+
+  it('GIVEN non empty CourseList WHEN I click sort ASC by "Category" THEN "Title" and "Author" sorter icon will be set to None', () => {
+    // Given
+    const { debug } = renderElement();
+    var tableRows = document.getElementsByTagName("table")[0].tBodies[0].rows;
+    expect(tableRows.length).toBeGreaterThan(0);
+    expect(document.getElementsByTagName("p").category.className).toBe(
+      "sort-header-none"
+    );
+    expect(document.getElementsByTagName("p").authorId.className).toBe(
+      "sort-header-none"
+    );
+    expect(document.getElementsByTagName("p").title.className).toBe(
+      "sort-header-asc"
+    );
+
+    // When
+    var element = document.getElementsByTagName("p").category;
+    fireEvent.click(element); //sort A-Z
+
+    // Then
+    expect(document.getElementsByTagName("p").category.className).toBe(
+      "sort-header-asc"
+    );
+    expect(document.getElementsByTagName("p").authorId.className).toBe(
+      "sort-header-none"
+    );
+    expect(document.getElementsByTagName("p").title.className).toBe(
+      "sort-header-none"
+    );
   });
 });
 

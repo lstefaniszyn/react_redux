@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import PropTypes from "prop-types";
+import PropTypes, { elementType } from "prop-types";
 import TextInput from "../common/TextInput";
 import SelectInput from "../common/SelectInput";
 const { Link } = require("react-router-dom");
@@ -23,12 +23,13 @@ const sortByTypes = {
 };
 
 const CourseList = ({ authors, courses, onDeleteClick }) => {
-  const [coursesList, setCoursesList] = useState(courses);
-  const [sorterStatus, setSorterStatus] = useState({
+  const defaultSorterStatus = {
     title: { sortType: sortByTypes.NONE, name: "title" },
     authorId: { sortType: sortByTypes.NONE, name: "authorId" },
     category: { sortType: sortByTypes.NONE, name: "category" },
-  });
+  };
+  const [coursesList, setCoursesList] = useState(courses);
+  const [sorterStatus, setSorterStatus] = useState(defaultSorterStatus);
 
   useEffect(() => {
     setCoursesList([
@@ -52,20 +53,24 @@ const CourseList = ({ authors, courses, onDeleteClick }) => {
       throw new Error("Unable to find Element name to sort");
     }
 
+    let sortType;
     if (sorterStatus[elementName].sortType === sortByTypes.NONE) {
-      sorterStatus[elementName].sortType = sortByTypes.ASC;
+      // sorterStatus[elementName].sortType = sortByTypes.ASC;
+      sortType = sortByTypes.ASC;
     } else if (sorterStatus[elementName].sortType === sortByTypes.ASC) {
-      sorterStatus[elementName].sortType = sortByTypes.DESC;
+      sortType = sortByTypes.DESC;
     } else {
-      sorterStatus[elementName].sortType = sortByTypes.ASC;
+      sortType = sortByTypes.ASC;
     }
+
+    // debugger;
+    setSorterStatus({
+      ...defaultSorterStatus,
+      [elementName]: { sortType: sortType, name: `${elementName}` },
+    });
+
     setCoursesList([
-      ...coursesList.sort(
-        dynamicObjectComparator(
-          elementName,
-          sorterStatus[elementName].sortType
-        )
-      ),
+      ...coursesList.sort(dynamicObjectComparator(elementName, sortType)),
     ]);
   }
 
@@ -103,7 +108,13 @@ const CourseList = ({ authors, courses, onDeleteClick }) => {
           </th>
           <th>
             <>
-              <p name="authorId" className="sort-header-none">
+              <p
+                name="authorId"
+                className={sorterStatus.authorId.sortType.class} //"sort-header-none"
+                onClick={(event) => {
+                  onClickSort(event);
+                }}
+              >
                 Author
               </p>
               <div>
@@ -132,7 +143,13 @@ const CourseList = ({ authors, courses, onDeleteClick }) => {
           </th>
           <th>
             <>
-              <p name="category" className="sort-header-none">
+              <p
+                name="category"
+                className={sorterStatus.category.sortType.class} //"sort-header-none"
+                onClick={(event) => {
+                  onClickSort(event);
+                }}
+              >
                 Category
               </p>
               <div>
