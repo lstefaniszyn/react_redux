@@ -98,6 +98,15 @@ function mapStateToProps(state, ownProps) {
     slug && state.courses.length > 0
       ? getCourseBySlug(state.courses, slug)
       : newCourse;
+  if (course === null) {
+    ownProps.history.push(`/${slug}`);
+    return {
+      course: {},
+      courses: [],
+      authors: [],
+    };
+  }
+
   return {
     course: course,
     courses: state.courses,

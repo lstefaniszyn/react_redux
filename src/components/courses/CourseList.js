@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import PropTypes, { elementType } from "prop-types";
+import PropTypes from "prop-types";
 import TextInput from "../common/TextInput";
 import SelectInput from "../common/SelectInput";
 const { Link } = require("react-router-dom");
