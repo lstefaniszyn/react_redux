@@ -1,7 +1,7 @@
 import React from "react";
 import { shallow, mount } from "enzyme";
 import { MemoryRouter } from "react-router-dom";
-import Header from "./Header";
+import { Header } from "./Header";
 
 // Note how with shallow render you search for the React component tag
 it("contains 3 NavLinks via shallow", () => {

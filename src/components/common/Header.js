@@ -3,7 +3,7 @@ import { NavLink } from "react-router-dom";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 
-const Header = ({ coursesNumber }) => {
+export const Header = ({ coursesNumber }) => {
   const activeStyle = { color: "#F15B2A" };
 
   return (
