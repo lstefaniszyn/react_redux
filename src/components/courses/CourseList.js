@@ -38,7 +38,7 @@ const CourseList = ({ authors, courses, onDeleteCourse }) => {
 
     setSorterStatus({
       ...sorterStatus,
-      ["title"]: { sortType: sortByTypes.ASC, ...sorterStatus.title},
+      ["title"]: { ...sorterStatus.title, sortType: sortByTypes.ASC },
     });
 
     return () => {

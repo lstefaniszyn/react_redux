@@ -15,7 +15,7 @@ function renderElement(args) {
         authorName: authors.find((a) => a.id === course.authorId).name,
       };
     }),
-    onDeleteClick: () => {},
+    onDeleteCourse: () => {},
   };
 
   const props = { ...defaultProps, ...args };
