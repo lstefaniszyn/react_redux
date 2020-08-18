@@ -1,6 +1,8 @@
 {
   "name": "courses-list",
   "description": "List of courses in PluralSight by React and Redux",
+  "version": "1.0.0",
+  "private": true,
   "scripts": {
     "start": "run-p start:dev start:api",
     "start:dev": "webpack-dev-server --config webpack.config.dev.js --port 3000",
