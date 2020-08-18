@@ -68,7 +68,7 @@ export const CoursesPage = ({
           {courses.length === 0 ? (
             <h3 style={{ fontFamily: "cursive" }}>No courses available</h3>
           ) : (
-            <CourseList authors={authors} courses={courses} onDeleteClick={handleDeleteCourse} />
+            <CourseList authors={authors} courses={courses} onDeleteCourse={handleDeleteCourse} />
           )}
         </>
       )}

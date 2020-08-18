@@ -22,7 +22,7 @@ const sortByTypes = {
   NONE: { text: "none", sortOrder: 0, class: "sort-header-none" },
 };
 
-const CourseList = ({ authors, courses, onDeleteClick }) => {
+const CourseList = ({ authors, courses, onDeleteCourse }) => {
   const defaultSorterStatus = {
     title: { sortType: sortByTypes.NONE, name: "title" },
     authorId: { sortType: sortByTypes.NONE, name: "authorId" },
@@ -38,13 +38,28 @@ const CourseList = ({ authors, courses, onDeleteClick }) => {
 
     setSorterStatus({
       ...sorterStatus,
-      ["title"]: { sortType: sortByTypes.ASC, name: "title" },
+      ["title"]: { sortType: sortByTypes.ASC, ...sorterStatus.title},
     });
 
     return () => {
       //cleanup;
     };
   }, []);
+
+  function onDeleteClick(course) {
+    onDeleteCourse(course);
+    var list = coursesList.filter((c) => {
+      return course.id != c.id;
+    });
+
+    var sort = Object.values(sorterStatus).filter((f) => {
+      return f.sortType != sortByTypes.NONE;
+    });
+
+    setCoursesList([
+      ...list.sort(dynamicObjectComparator(sort.name, sort.sortType)),
+    ]);
+  }
 
   function onClickSort(event) {
     console.log(`Clicked "${event.target.attributes.name.value}"`);
@@ -63,7 +78,6 @@ const CourseList = ({ authors, courses, onDeleteClick }) => {
       sortType = sortByTypes.ASC;
     }
 
-    // debugger;
     setSorterStatus({
       ...defaultSorterStatus,
       [elementName]: { sortType: sortType, name: `${elementName}` },
@@ -207,7 +221,7 @@ const CourseList = ({ authors, courses, onDeleteClick }) => {
 CourseList.propTypes = {
   authors: PropTypes.array.isRequired,
   courses: PropTypes.array.isRequired,
-  onDeleteClick: PropTypes.func.isRequired,
+  onDeleteCourse: PropTypes.func.isRequired,
 };
 
 export default CourseList;

@@ -29,7 +29,15 @@ table th {
   background-position: center right;
 }
 
+.number-courses {
+  border-radius: 5px;
+  /* padding: 10px; */
+  margin-bottom: 20px;
+  /* background-color: burlywood; */
+  color: black;
+  font-style: italic;
 
+}
 
 .form-group {
   margin-right: 1rem;
