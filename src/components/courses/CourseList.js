@@ -33,12 +33,17 @@ const CourseList = ({ authors, courses, onDeleteCourse }) => {
 
   useEffect(() => {
     setCoursesList([
-      ...coursesList.sort(dynamicObjectComparator("title", sortByTypes.ASC)),
+      ...coursesList.sort(
+        dynamicObjectComparator(sorterStatus.title.name, sortByTypes.ASC)
+      ),
     ]);
 
     setSorterStatus({
       ...sorterStatus,
-      ["title"]: { ...sorterStatus.title, sortType: sortByTypes.ASC },
+      [sorterStatus.title.name]: {
+        ...sorterStatus.title,
+        sortType: sortByTypes.ASC,
+      },
     });
 
     return () => {

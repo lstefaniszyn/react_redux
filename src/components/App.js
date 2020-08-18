@@ -2,6 +2,7 @@ import React from "react";
 import { Route, Switch } from "react-router-dom";
 import HomePage from "./home/HomePage";
 import AboutPage from "./about/AboutPage";
+// eslint-disable-next-line import/no-named-as-default
 import Header from "./common/Header";
 import PageNotFound from "./PageNotFound";
 // eslint-disable-next-line import/no-named-as-default
