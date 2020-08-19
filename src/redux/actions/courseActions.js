@@ -52,6 +52,7 @@ export function saveCourse(course) {
           course.id
             ? dispatch(updateCourseSuccess(course))
             : dispatch(createCourseSuccess(course));
+          dispatch(loadCourses());
         })
         .catch((error) => {
           dispatch(errorApiCall(error));

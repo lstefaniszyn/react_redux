@@ -98,7 +98,7 @@ function mapStateToProps(state, ownProps) {
     slug && state.courses.length > 0
       ? getCourseBySlug(state.courses, slug)
       : newCourse;
-  if (course === null) {
+  if (course === null) { //when course slug was not found, then redirect to 404
     ownProps.history.push(`/${slug}`);
     return {
       course: {},

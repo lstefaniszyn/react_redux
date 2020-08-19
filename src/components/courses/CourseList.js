@@ -49,7 +49,7 @@ const CourseList = ({ authors, courses, onDeleteCourse }) => {
     return () => {
       //cleanup;
     };
-  }, []);
+  }, [courses]);
 
   function onDeleteClick(course) {
     onDeleteCourse(course);
@@ -193,7 +193,13 @@ const CourseList = ({ authors, courses, onDeleteCourse }) => {
       <tbody>
         {coursesList.map((course) => {
           return (
-            <tr key={course.id}>
+            <tr
+              key={
+                course.id === null
+                  ? Math.floor(Math.random() * 1000)
+                  : course.id
+              }
+            >
               <td>
                 <a
                   className="btn btn-light"

@@ -19,6 +19,8 @@ export const CoursesPage = ({
   const [redirectToAddCoursePage, setRedirectToAddCoursePage] = useState(false);
 
   useEffect(() => {
+    
+
     if (authors.length === 0) {
       actionLoadAuthors().catch((error) => {
         alert(`Loading authors failed ${error}`);
@@ -68,7 +70,11 @@ export const CoursesPage = ({
           {courses.length === 0 ? (
             <h3 style={{ fontFamily: "cursive" }}>No courses available</h3>
           ) : (
-            <CourseList authors={authors} courses={courses} onDeleteCourse={handleDeleteCourse} />
+            <CourseList
+              authors={authors}
+              courses={courses}
+              onDeleteCourse={handleDeleteCourse}
+            />
           )}
         </>
       )}
