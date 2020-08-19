@@ -31,20 +31,58 @@ const CourseList = ({ authors, courses, onDeleteCourse }) => {
   const [coursesList, setCoursesList] = useState(courses);
   const [sorterStatus, setSorterStatus] = useState(defaultSorterStatus);
 
-  useEffect(() => {
+  function getSortComparator(name = null, type = null) {
+    let sortBy = Object.values(sorterStatus).filter((f) => {
+      return f.sortType != sortByTypes.NONE;
+    });
+
+    let comparator;
+    if (name != null && type != null) {
+      comparator = dynamicObjectComparator(name, type);
+    } else if ((name === null && type === null) || sortBy === []) {
+      comparator = dynamicObjectComparator(
+        sorterStatus.title.name,
+        sortByTypes.ASC
+      );
+    } else if (sortBy != []) {
+      comparator = dynamicObjectComparator(sortBy.name, sortBy.sortType);
+    } else {
+      console.error("Unknown status");
+    }
+    return comparator;
+  }
+
+  function sortCourseList(name = null, type = null) {
+    setSorterStatus({
+      ...defaultSorterStatus,
+      [name]: { sortType: type, name: `${name}` },
+    });
+
     setCoursesList([
       ...coursesList.sort(
-        dynamicObjectComparator(sorterStatus.title.name, sortByTypes.ASC)
+        getSortComparator(name, type)
+        // dynamicObjectComparator(sorterStatus.title.name, sortByTypes.ASC)
       ),
     ]);
+  }
 
-    setSorterStatus({
-      ...sorterStatus,
-      [sorterStatus.title.name]: {
-        ...sorterStatus.title,
-        sortType: sortByTypes.ASC,
-      },
-    });
+  useEffect(() => {
+    sortCourseList(sorterStatus.title.name, sortByTypes.ASC);
+
+    // setCoursesList([
+    //   ...coursesList.sort(
+    //     getSortComparator()
+    //     // dynamicObjectComparator(sorterStatus.title.name, sortByTypes.ASC)
+    //   ),
+    // ]);
+
+    // setSorterStatus({
+    //   ...sorterStatus,
+    //   [sorterStatus.title.name]: {
+    //     ...sorterStatus.title,
+    //     sortType: sortByTypes.ASC,
+    //   },
+    // });
 
     return () => {
       //cleanup;
