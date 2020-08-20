@@ -2,7 +2,10 @@ import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import TextInput from "../common/TextInput";
 import SelectInput from "../common/SelectInput";
+import * as courseSortActions from "../../redux/actions/courseActions";
+import { sortByTypes } from "../../redux/reducers/initialState";
 const { Link } = require("react-router-dom");
+import { connect } from "react-redux";
 
 function dynamicObjectComparator(property, sortType = sortByTypes.ASC) {
   return function (a, b) {
@@ -16,20 +19,36 @@ function dynamicObjectComparator(property, sortType = sortByTypes.ASC) {
   };
 }
 
-const sortByTypes = {
-  DESC: { text: "descending", sortOrder: 1, class: "sort-header-desc" },
-  ASC: { text: "ascending", sortOrder: -1, class: "sort-header-asc" },
-  NONE: { text: "none", sortOrder: 0, class: "sort-header-none" },
+// const sortByTypes = {
+//   DESC: { text: "descending", sortOrder: 1, class: "sort-header-desc" },
+//   ASC: { text: "ascending", sortOrder: -1, class: "sort-header-asc" },
+//   NONE: { text: "none", sortOrder: 0, class: "sort-header-none" },
+// };
+
+const defaultSorterStatus = {
+  title: { sortType: sortByTypes.NONE, name: "title" },
+  authorId: { sortType: sortByTypes.NONE, name: "authorId" },
+  category: { sortType: sortByTypes.NONE, name: "category" },
 };
 
-const CourseList = ({ authors, courses, onDeleteCourse }) => {
-  const defaultSorterStatus = {
-    title: { sortType: sortByTypes.NONE, name: "title" },
-    authorId: { sortType: sortByTypes.NONE, name: "authorId" },
-    category: { sortType: sortByTypes.NONE, name: "category" },
-  };
+const CourseList = ({
+  authors,
+  courses,
+  onDeleteCourse,
+  courseSort,
+  actionUpdateCourseSort,
+  ...props
+}) => {
   const [coursesList, setCoursesList] = useState(courses);
-  const [sorterStatus, setSorterStatus] = useState(defaultSorterStatus);
+  const [sorterStatus, setSorterStatus] = useState(courseSort);
+
+  useEffect(() => {
+    sortCourseList();
+
+    return () => {
+      //cleanup;
+    };
+  }, []);
 
   function getSortNameType(name, type) {
     let sortBy = Object.values(sorterStatus).filter((f) => {
@@ -51,18 +70,13 @@ const CourseList = ({ authors, courses, onDeleteCourse }) => {
     [name, type] = getSortNameType(name, type);
     setCoursesList([...coursesList.sort(dynamicObjectComparator(name, type))]);
 
+    actionUpdateCourseSort({ name: name, type: type });
+
     setSorterStatus({
       ...defaultSorterStatus,
       [name]: { sortType: type, name: `${name}` },
     });
   }
-
-  useEffect(() => {
-    sortCourseList();
-    return () => {
-      //cleanup;
-    };
-  }, [courses]);
 
   function onDeleteClick(course) {
     onDeleteCourse(course);
@@ -234,6 +248,20 @@ CourseList.propTypes = {
   authors: PropTypes.array.isRequired,
   courses: PropTypes.array.isRequired,
   onDeleteCourse: PropTypes.func.isRequired,
+  courseSort: PropTypes.object.isRequired,
+  actionUpdateCourseSort: PropTypes.func.isRequired,
+  actionLoadCourseSort: PropTypes.func.isRequired,
 };
 
-export default CourseList;
+function mapStateToProps(state) {
+  return {
+    courseSort: state.courseSort,
+  };
+}
+
+const mapDispatchToProps = {
+  actionUpdateCourseSort: courseSortActions.updateCourseSortSuccess,
+  actionLoadCourseSort: courseSortActions.loadCourseSortSuccess,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(CourseList);

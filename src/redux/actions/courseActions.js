@@ -18,19 +18,34 @@ export function deleteCourseOptimistic(course) {
   return { type: actionsType.DELETE_COURSE_OPTIMISTIC, course: course };
 }
 
+export function updateCourseSortSuccess(sortType) {
+  return { type: actionsType.UPDATE_COURSE_SORT_SUCCESS, sortType };
+}
+
+export function loadCourseSortSuccess(sortType) {
+  return { type: actionsType.LOAD_COURSE_SORT_SUCCESS, sortType };
+}
+
+
 export function loadCourses() {
   return function (dispatch) {
     dispatch(beginApiCall());
     return courseAPI
-      .getCourses()
-      .then((courses) => {
+    .getCourses()
+    .then((courses) => {
         dispatch(loadCoursesSuccess(courses));
       })
       .catch((error) => {
         dispatch(errorApiCall(error));
         throw error;
       });
-  };
+    };
+  }
+  
+  export function updateCourseSort(sortType){
+    return function (dispatch) {
+      dispatch(updateCourseSortSuccess(sortType));
+  }
 }
 
 export function deleteCourse(course) {
