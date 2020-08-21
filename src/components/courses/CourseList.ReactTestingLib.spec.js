@@ -1,13 +1,15 @@
 import React from "react";
 import { cleanup, render, screen, fireEvent } from "@testing-library/react";
-import CourseList from "./CourseList";
+import { CourseList } from "./CourseList";
 import { courses, authors } from "../../../tools/mockData";
 import { MemoryRouter } from "react-router-dom";
+import initialState from "../../redux/reducers/initialState";
 
 afterEach(cleanup);
 
 function renderElement(args) {
   const defaultProps = {
+    courseSort: initialState.sortStatus,
     authors: authors,
     courses: courses.map((course) => {
       return {
@@ -16,6 +18,8 @@ function renderElement(args) {
       };
     }),
     onDeleteCourse: () => {},
+    actionLoadCourseSort: () => {},
+    actionUpdateCourseSort: () => {},
   };
 
   const props = { ...defaultProps, ...args };

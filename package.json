@@ -9,7 +9,7 @@
     "prestart:api": "node tools/createMockDb.js",
     "start:api": "node tools/apiServer.js",
     "test": "jest --watch \"src/.*\\.spec\\.js\"",
-    "test:ci": "jest \"src/.*\\.spec\\.js\"",
+    "test:ci": "jest \"src/.*\\.spec\\.js\" --coverage",
     "clean:build": "rimraf ./build && mkdir build",
     "prebuild": "run-p clean:build test:ci",
     "build": "webpack --config webpack.config.prod.js",

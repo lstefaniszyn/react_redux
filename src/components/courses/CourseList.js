@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import TextInput from "../common/TextInput";
 import SelectInput from "../common/SelectInput";
 import * as courseSortActions from "../../redux/actions/courseActions";
-import { sortByTypes } from "../../redux/reducers/initialState";
+import initialState, { sortByTypes } from "../../redux/reducers/initialState";
 const { Link } = require("react-router-dom");
 import { connect } from "react-redux";
 
@@ -19,19 +19,7 @@ function dynamicObjectComparator(property, sortType = sortByTypes.ASC) {
   };
 }
 
-// const sortByTypes = {
-//   DESC: { text: "descending", sortOrder: 1, class: "sort-header-desc" },
-//   ASC: { text: "ascending", sortOrder: -1, class: "sort-header-asc" },
-//   NONE: { text: "none", sortOrder: 0, class: "sort-header-none" },
-// };
-
-const defaultSorterStatus = {
-  title: { sortType: sortByTypes.NONE, name: "title" },
-  authorId: { sortType: sortByTypes.NONE, name: "authorId" },
-  category: { sortType: sortByTypes.NONE, name: "category" },
-};
-
-const CourseList = ({
+export const CourseList = ({
   authors,
   courses,
   onDeleteCourse,
@@ -73,7 +61,7 @@ const CourseList = ({
     actionUpdateCourseSort({ name: name, type: type });
 
     setSorterStatus({
-      ...defaultSorterStatus,
+      ...initialState.sortStatus,
       [name]: { sortType: type, name: `${name}` },
     });
   }
@@ -95,9 +83,8 @@ const CourseList = ({
       throw new Error("Unable to find Element name to sort");
     }
 
-    let sortType;
+    var sortType;
     if (sorterStatus[elementName].sortType === sortByTypes.NONE) {
-      // sorterStatus[elementName].sortType = sortByTypes.ASC;
       sortType = sortByTypes.ASC;
     } else if (sorterStatus[elementName].sortType === sortByTypes.ASC) {
       sortType = sortByTypes.DESC;
@@ -161,7 +148,7 @@ const CourseList = ({
                   }))}
                   onChange={(event) => {
                     setCoursesList(
-                      event.target.value === "" //when user did not select Author
+                      event.target.value === "" //when user does not select Author
                         ? courses
                         : courses.filter((course) => {
                             return (

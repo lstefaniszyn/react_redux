@@ -1,0 +1,31 @@
+{
+  "editor.suggestSelection": "first",
+  "vsintellicode.modify.editor.suggestSelection": "automaticallyOverrodeDefaultValue",
+  "java.semanticHighlighting.enabled": true,
+  "files.exclude": {
+    "**/.classpath": true,
+    "**/.project": true,
+    "**/.settings": true,
+    "**/.factorypath": true
+  },
+  "files.autoSave": "afterDelay",
+  "java.requirements.JDK11Warning": false,
+  "liveServer.settings.port": 3000,
+  "window.zoomLevel": 0,
+  "[json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "workbench.colorTheme": "Oceanic Next (dimmed bg)",
+  "editor.minimap.enabled": true,
+  "editor.renderControlCharacters": true,
+  "workbench.iconTheme": "material-icon-theme",
+  "editor.formatOnSave": true,
+  "cSpell.userWords": [
+    "prestart"
+  ],
+  "liveServer.settings.donotShowInfoMsg": true,
+  "jest.showCoverageOnLoad": true
+}

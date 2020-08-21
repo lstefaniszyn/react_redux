@@ -1,0 +1,3 @@
+To install use extensions:
+
+--install-extension <ext> //see 'code --help'
