@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import * as courseActions from "../../redux/actions/courseActions";
 import * as authorActions from "../../redux/actions/authorsActions";
 import PropTypes from "prop-types";
+// eslint-disable-next-line import/no-named-as-default
 import CourseList from "./CourseList";
 import { Redirect } from "react-router-dom";
 import Spinner from "../common/Spinner";
@@ -19,8 +20,6 @@ export const CoursesPage = ({
   const [redirectToAddCoursePage, setRedirectToAddCoursePage] = useState(false);
 
   useEffect(() => {
-    
-
     if (authors.length === 0) {
       actionLoadAuthors().catch((error) => {
         alert(`Loading authors failed ${error}`);

@@ -9,6 +9,9 @@ module.exports = {
   target: "web",
   devtool: "cheap-module-source-map",
   entry: "./src/index",
+  node: {
+    fs: "empty",
+  },
   output: {
     path: path.resolve(__dirname, "build"),
     publicPath: "/",

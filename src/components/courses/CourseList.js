@@ -25,7 +25,6 @@ export const CourseList = ({
   onDeleteCourse,
   courseSort,
   actionUpdateCourseSort,
-  ...props
 }) => {
   const [coursesList, setCoursesList] = useState(courses);
   const [sorterStatus, setSorterStatus] = useState(courseSort);
@@ -77,7 +76,6 @@ export const CourseList = ({
   }
 
   function onClickSort(event) {
-    console.log(`Clicked "${event.target.attributes.name.value}"`);
     var elementName = event.target.attributes.name.value;
     if (!sorterStatus.hasOwnProperty(elementName)) {
       throw new Error("Unable to find Element name to sort");

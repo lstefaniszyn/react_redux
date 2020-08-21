@@ -11,6 +11,9 @@ module.exports = {
   target: "web",
   devtool: "source-map",
   entry: "./src/index",
+  node: {
+    fs: "empty",
+  },
   output: {
     path: path.resolve(__dirname, "build"),
     publicPath: "/",
