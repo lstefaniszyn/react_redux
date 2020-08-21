@@ -25,7 +25,6 @@ export const CourseList = ({
   onDeleteCourse,
   courseSort,
   actionUpdateCourseSort,
-  ...props
 }) => {
   const [coursesList, setCoursesList] = useState(courses);
   const [sorterStatus, setSorterStatus] = useState(courseSort);
